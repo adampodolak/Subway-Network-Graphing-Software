@@ -1,48 +1,42 @@
-from main import format_data, count, find_max
+from main import format_data, find_max
 
 
 class Station:
-    def __init__(self, id, latitude, longitude, name, display_name, zone, total_lines, rail) -> None:
+    def __init__(self, id, line, time) -> None:
         self.id = id
-        self.latitude = latitude
-        self.longitude = longitude
-        self.name = name
-        self.dislpay_name = display_name
-        self.zone = zone
-        self.total_lines = total_lines
-        self.rail = rail
+        self.neighbours = []
+        self.line = line
+        self.time= time
+        self.marked = False
 
 
 class Edge:
     def __init__(self, size) -> None:
-        self.edges = [[0]*size] * size
-
-    def print_edges(self):
-        print(self.edges)
-
-    def build_edgeGraph(self, Elist):
-        print(Elist[0][3])
-        print(Elist[1][3])
-        print(Elist[2][3])
-        print(Elist[3][3])
-        print(Elist[4][3])
+        self.edges = []
+        for i in range(size):
+            self.edges.append([]) 
+        
+    def build_edgeGraph(self, Elist, size):
+        #initialize stations in array
+        for i in range(size):
+            self.edges[i] = Station(i+1,0,0)
+            
         for i in Elist:
-            station1 = int(i[0]) - 1
-            station2 = int(i[1]) - 1
-            time = int(i[3])
-            self.edges[station1][station2] = time
+            s1 = Station(i[0],i[2],i[3])
+            s2 = Station(i[1],i[2],i[3])
+            self.edges[int(i[0])-1].neighbours.append(s2)
+            self.edges[int(i[1])-1].neighbours.append(s1)
+            
 
     def get(self, s1, s2):
-        s1 -= 1
-        s2 -= 1
-        return self.edges[s1][s2]
+        a =s1-1
+        b =s2
+        for i in self.edges[a].neighbours:
+            if (int(i.id) == int(b)):
+                return i.time
 
-
-graph = Edge(find_max('../_dataset/london.stations.csv'))
-graph.build_edgeGraph(format_data('../_dataset/london.connections.csv'))
-print("results")
-print(graph.get(163, 11))
-print(graph.get(11, 212))
-print(graph.get(49, 87))
-print(graph.get(49, 197))
-print(graph.get(82, 163))
+size = find_max('../_dataset/london.stations.csv')
+graph = Edge(size)
+graph.build_edgeGraph(format_data('../_dataset/london.connections.csv'),size)
+for i in graph.neighbours[10]:
+    print(i.id)
