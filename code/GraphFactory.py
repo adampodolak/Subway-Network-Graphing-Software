@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import csv
+# factory pattern to generate graphs
 
 
 class GraphFactory(ABC):
