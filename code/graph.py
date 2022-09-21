@@ -1,4 +1,4 @@
-from main import format_data, find_max
+from GraphFactory import *
 
 
 class Station:
@@ -35,8 +35,15 @@ class Edge:
             if (int(i.id) == int(b)):
                 return i.time
 
-size = find_max('../_dataset/london.stations.csv')
+connections = '../_dataset/london.connections.csv'
+stations = '../_dataset/london.stations.csv'
+
+g = GraphFactory()
+connections_graph = g.build_graph("connections")
+edges = connections_graph.format_csv_file(connections)
+size = connections_graph.find_max(stations)
+
 graph = Edge(size)
-graph.build_edgeGraph(format_data('../_dataset/london.connections.csv'),size)
-for i in graph.neighbours[10]:
-    print(i.id)
+graph.build_edgeGraph(edges, size)
+
+
