@@ -9,9 +9,10 @@ class Station:
         self.time = time
 
 
-class Edge:
+class EdgeGraph:
     def __init__(self, size):
         self.edges = []
+        self.size = size
         for i in range(size):
             self.edges.append([])
 
@@ -34,27 +35,23 @@ class Edge:
                 return i.time
 
 
-connections = '../_dataset/london.connections.csv'
-stations = '../_dataset/london.stations.csv'
-
-g = GraphFactory()
-connections_graph = g.build_graph("connections")
-edges = connections_graph.format_csv_file(connections)
-size = connections_graph.find_max(stations)
-
-graph = Edge(size)
-graph.build_edgeGraph(edges, size)
-
-# graph.build_edgeGraph(format_data('../_dataset/london.connections.csv'), size)
+def getWeight(graph, s1, s2):
+    return(graph.get(s1, s2))
 
 
-print("results")
+def main():
+    connections = '../_dataset/london.connections.csv'
+    stations = '../_dataset/london.stations.csv'
 
-print(graph.get(11, 163))
-# for i in graph.edges[10].neighbours:
-#    print(i.id)
-print(graph.edges[10].neighbours[0].id)
-print(graph.get(11, 212))
-print(graph.get(49, 87))
-print(graph.get(49, 197))
-print(graph.get(82, 163))
+    g = GraphFactory()
+    connections_graph = g.build_graph("connections")
+    edges = connections_graph.format_csv_file(connections)
+    size = connections_graph.find_max(stations)
+
+    graph = EdgeGraph(size)
+    graph.build_edgeGraph(edges, size)
+
+    return graph
+
+
+main()
