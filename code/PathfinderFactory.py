@@ -5,6 +5,7 @@ import math
 
 
 class PathfinderResult(TypedDict):
+    path: list[int]
     num_nodes_visited: int
     num_edges_visited: int
     travel_time: int
@@ -15,7 +16,7 @@ class PathfinderAlgorithm(ABC):
     edges_visited = 0
     travel_time = 0
 
-    def call(self, graph: EdgeGraph) -> PathfinderResult:
+    def __create__(self, graph: EdgeGraph) -> PathfinderResult:
         result: PathfinderResult = {
             "path": self.findpath(graph),
             "nodes": self.nodes_visited,
