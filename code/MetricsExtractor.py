@@ -52,29 +52,3 @@ class GetAverageDegreeNodes(MetricsExtractor):
             s += len(i.neighbours)
 
         return s // len(graph.edges)
-
-
-graph = main()
-
-selector = Selector()
-
-selector.setMetricsExtractor(GetNumberOfNodes())
-num_nodes = selector.executeMetricsExtractor(graph)
-
-print(num_nodes)
-
-selector.setMetricsExtractor(GetNumberOfEdges())
-num_edges = selector.executeMetricsExtractor(graph)
-
-print(num_edges)
-
-selector.setMetricsExtractor(GetAverageDegreeNodes())
-avg_dg_nodes = selector.executeMetricsExtractor(graph)
-
-print(avg_dg_nodes)
-
-selector.setMetricsExtractor(GetDegreeDistribution())
-node_degree_distribution = selector.executeMetricsExtractor(graph)
-
-print(node_degree_distribution)
-print(len(node_degree_distribution))

@@ -1,5 +1,6 @@
 from graph import *
 import math
+from PathfinderFactory import *
 
 
 class Itinerary:
