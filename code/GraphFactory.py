@@ -54,6 +54,15 @@ class StationsGraph(GraphFactory):
             self.edges.pop(0)
         return self.edges
 
+    def find_max(self, csv):
+        l = self.format_csv_file(csv)
+        max = int(l[0][0])
+        for i in l:
+            if int(i[0]) > max:
+                max = int(i[0])
+
+        return max
+
 
 class GraphFactory():
 

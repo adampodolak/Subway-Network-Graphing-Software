@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TypedDict
-from graph import EdgeGraph
+from graph import *
 import math
 
 
@@ -16,14 +16,14 @@ class PathfinderAlgorithm(ABC):
     edges_visited = 0
     travel_time = 0
 
-    def __create__(self, graph: EdgeGraph) -> PathfinderResult:
-        result: PathfinderResult = {
-            "path": self.findpath(graph),
+    def call(self, graph: EdgeGraph, s1, s2) -> PathfinderResult:
+        self.result: PathfinderResult = {
+            "path": self.findpath(graph, s1, s2),
             "nodes": self.nodes_visited,
             "edges": self.edges_visited,
             "travel time": self.travel_time
         }
-        return result
+        return self.result
 
     def set(self, num_nodes, num_edges, travel_time):
         self.nodes_visited = num_nodes
@@ -38,34 +38,47 @@ class PathfinderAlgorithm(ABC):
 class Dijkstras(PathfinderAlgorithm):
     # implement dijkstras here, add the number of nodes visited, edges visited, travel time, and return the path
     def findpath(self, graph: EdgeGraph, s1, s2):
+        mst = [[]]
         # q holds priority list
-        q = []
+        q = [graph.edges[s1-1]]
         distTo = []
         # qfollow and q indexes are connected. qfollow allows access to distTo[old node]
-        qfollow = []
+        qfollow = [graph.edges[s1-1]]
 
         # initialize distTo array
         for i in range(len(graph.edges)):
             distTo.append(1000)
+            mst.append([])
         distTo[s1-1] = 0
+        mst[s1-1].append(s1)
 
-        # initialize q and qfollow
-        q.append(graph.edges[s1-1])
-        qfollow.append(q[0])
-        q = self.find_neighbours(q, qfollow)
+        q = self.find_neighbours(graph, q, qfollow)
 
-        # distTo[new node] = time to new node from old node + distTo[old node]
         while q:
             index = int(q[0].id)-1
+            # distTo[new node] = time to new node from old node + distTo[old node]
             if distTo[index] > (int(q[0].time) + distTo[int(qfollow[0].id)-1]):
                 distTo[index] = int(q[0].time) + distTo[int(qfollow[0].id)-1]
-            q = self.find_neighbours(q, qfollow, graph)
+                # path to new node = path to old node + new node
+                mst[index] = []
+                for i in mst[int(qfollow[0].id)-1]:
+                    mst[index].append(i)
+                mst[index].append(q[0].id)
+
+            # update priority queue
+            q = self.find_neighbours(graph, q, qfollow)
             q.pop(0)
             qfollow.pop(0)
 
-        return distTo[s2-1]
+        nodes = len(mst[s2-1])
+        edges = len(mst[s2-1]) - 1
 
-    def find_neighbours(self, q, qfollow, graph):
+        self.set(nodes, edges, distTo[s2-1])
+
+        if s2 <= len(graph.edges):
+            return mst[s2-1]
+
+    def find_neighbours(self, graph: EdgeGraph, q, qfollow):
         for i in graph.edges[int(q[0].id)-1].neighbours:
             if i.marked == False:
                 q.append(i)
@@ -75,8 +88,10 @@ class Dijkstras(PathfinderAlgorithm):
 
 
 class Astar(PathfinderAlgorithm):
+
     # implement A*
     def findpath(self, graph: EdgeGraph, s1, s2):
+        mst = [[]]
         # q holds priority list
         q = []
         distTo = []
@@ -94,7 +109,9 @@ class Astar(PathfinderAlgorithm):
         # initialize distTo array
         for i in range(len(graph.edges)):
             distTo.append(1000)
+            mst.append([])
         distTo[s1-1] = 0
+        mst[s1-1].append(s1)
 
         # initialize q and qfollow
         q.append(graph.edges[s1-1])
@@ -107,6 +124,11 @@ class Astar(PathfinderAlgorithm):
             index = int(q[0].id)-1
             if distTo[index] > (int(q[0].time) + distTo[int(qfollow[0].id)-1]):
                 distTo[index] = int(q[0].time) + distTo[int(qfollow[0].id)-1]
+                # path to new node = path to old node + new node
+                mst[index] = []
+                for i in mst[int(qfollow[0].id)-1]:
+                    mst[index].append(i)
+                mst[index].append(q[0].id)
 
             if int(q[0].id) == s2:
                 print("leaving")
@@ -137,7 +159,7 @@ class Astar(PathfinderAlgorithm):
         return q, qfollow, shortest_path
 
 
-class SortingFactory():
+class PathfinderFactory():
 
     @staticmethod
     def createPathfinder(name):
@@ -147,3 +169,15 @@ class SortingFactory():
             return Astar()
         else:
             raise ValueError(name)
+
+
+graph = main()
+
+alg = PathfinderFactory()
+dijkstras = alg.createPathfinder("dijkstras")
+dijkstras.call(graph, 11, 45)
+result = dijkstras.result
+nodes = dijkstras.result["nodes"]
+edges = dijkstras.result["edges"]
+print(result)
+print(nodes, edges)
