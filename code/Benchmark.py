@@ -7,7 +7,7 @@ import random
 def build_dataset(num_of_samples):
     dataset = {}
 
-    for i in range(1, num_of_samples + 1):
+    for i in range(0, num_of_samples):
         dataset["{0}".format(i)] = random.sample(range(1, 303), 2)
 
     return dataset
@@ -29,7 +29,7 @@ def create_dijkstras():
     return dijkstras
 
 
-def create_astart():
+def create_astar():
     pathfinder = PathfinderFactory()
     a_star = pathfinder.create_pathfinder("a*")
     return a_star

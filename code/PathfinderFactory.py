@@ -37,6 +37,9 @@ class PathfinderAlgorithm(ABC):
 
 class Dijkstras(PathfinderAlgorithm):
     def findpath(self, graph: EdgeGraph, s1, s2):
+        if not graph.edges[s1-1] or not graph.edges[s2 - 1]:
+            return []
+
         mst = [[]]
         # q holds priority list
         q = [graph.edges[s1-1]]
@@ -96,6 +99,9 @@ class Dijkstras(PathfinderAlgorithm):
 
 class AstarDFS(PathfinderAlgorithm):
     def findpath(self, graph: EdgeGraph, s1, s2):
+        if not graph.edges[s1-1] or not graph.edges[s2 - 1]:
+            return []
+
         path = [graph.edges[s1-1]]
         end = False
 
