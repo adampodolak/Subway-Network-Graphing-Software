@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TypedDict
 from graph import *
 import math
-from TravelerSalesman import *
+from PathCoverage import *
 
 
 class PathfinderResult(TypedDict):
@@ -183,5 +183,5 @@ a = alg.createPathfinder("a*")
 # aresult = a.result
 # print(aresult)
 
-traverser = TSalesman()
-traverser.find(graph, 42,[42,120,238,292,290,142,94])
+traverser = TravellingSalesman(graph,dijkstras)
+traverser.find(27,[27,103,56,74])

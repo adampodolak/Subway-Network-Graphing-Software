@@ -11,7 +11,7 @@ class TSalesman():
         self.remember = [station]
 
         for i in validStationsID:
-            self.overlap[i] = []
+            self.overlap[i] = [i]
 
         if isConnected:
             self.find_paths(station, validStations, [], 0)
@@ -46,12 +46,19 @@ class TSalesman():
             if foundNeighbour == False:
                 return False
         return True
+
+     m 
                     
 
     def find_paths(self, station, validStations, path, distance):
 
         path.append(station)
         print(station.id)
+
+        look = []
+        for i in path:
+            look.append(i.id)
+        print (look)
 
         if len(path)>1:
             index = station.neighbours.index(int(path[-2].id))
@@ -63,15 +70,16 @@ class TSalesman():
                 complete = False
         
         if complete and (int(path[0].id) in station.neighbours) :
+            print ('here')
             path.append(path[0])
             self.routes.append([distance,path])
             return 
 
         deadEnd = True
         for i in validStations:
-            if (i.id not in self.overlap[int(station.id)]) and (int(i.id) in station.neighbours) and (int(i.id) != int(self.remember[-1].id)):
+            if (int(i.id) not in self.overlap[int(station.id)]) and (int(i.id) in station.neighbours) and (int(i.id) != int(self.remember[-1].id)):
                 self.remember.append(station)
-                self.overlap[int(station.id)].append(i.id)
+                self.overlap[int(station.id)].append(int(i.id))
                 self.find_paths(i, validStations, path, distance)
                 deadEnd = False
               

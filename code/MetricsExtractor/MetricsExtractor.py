@@ -28,15 +28,8 @@ class GetNumberOfEdges(MetricsExtractor):
     def get_metric(self, graph: EdgeGraph):
         count = 0
         for i in graph.edges:
-<<<<<<< HEAD:code/MetricsExtractor.py
             for j in i.neighbours:
                 count += 1
-=======
-            if i:
-                for j in i.neighbours:
-                    count += 1
-
->>>>>>> ce62144d6605b596b42adbc3977e2dd860ce1a48:code/MetricsExtractor/MetricsExtractor.py
         return count // 2
 
 
