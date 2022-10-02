@@ -1,80 +1,68 @@
-class TSalesman():
-    def __init__(self) -> None:
-        self.routes = []
-        self.remember = []
-        self.overlap = {}
+class TravellingSalesman():
 
-    def find(self, graph, stationID, validStationsID):
-        station, validStations = TSalesman.format(
-            stationID, validStationsID, graph)
-        isConnected = TSalesman.connected(validStationsID, validStations)
+    def __init__(self,graph,alg) -> None:
+        self.graph=graph
+        self.alg= alg
 
-        self.remember = [station]
+    def data(self,validStations):
+        self.stationList = {}
+        self.Paths = {}
+        self.distances = {}
 
-        for i in validStationsID:
-            self.overlap[i] = []
+        for i in validStations:
+            self.stationList[int(i.id)] = []
+            self.Paths[int(i.id)] = []
+            self.distances[int(i.id)] = []
+            for j in validStations:
+                if i!=j:
+                    self.stationList[int(i.id)].append(j.id)
+                    self.alg.call(self.graph, int(i.id), int(j.id))
+                    self.Paths[int(i.id)].append(self.alg.result["path"])
+                    self.distances[int(i.id)].append(self.alg.result["travel time"])
 
-        if isConnected:
-            self.find_paths(station, validStations, [], 0)
-            self.routes.sort()
-            pathNums = []
-            for i in self.routes[0][1]:
-                pathNums.append(i.id)
-            if len(self.routes) != 0:
-                print("Shortest route: ")
-                print(pathNums)
-                print(self.routes[0][0])
-            else:
-                print("FAIL!")
-        else:
-            print("invalid set of nodes")
-
-    def format(station, validStations, graph):
-        station = graph.edges[station-1]
+    def format(self, station, validStations):
+        station = self.graph.edges[station-1]
         Fstations = []
         for i in validStations:
-            if graph.edges[i-1]:
-                Fstations.append(graph.edges[i-1])
+            if self.graph.edges[i-1]:
+                Fstations.append(self.graph.edges[i-1])
         return station, Fstations
 
-    def connected(validStationsID, validStations):
-        for i in validStations:
-            foundNeighbour = False
-            for j in i.neighbours:
-                if j in validStationsID:
-                    foundNeighbour = True
-                    break
-            if not foundNeighbour:
-                return False
-        return True
+    def find(self, startID, validStationsID):
+        self.length = len(validStationsID)
+        self.startID = startID
+        start,validStations = self.format(startID, validStationsID)
+        self.data(validStations)
 
-    def find_paths(self, station, validStations, path, distance):
-        path.append(station)
-        print(station.id)
+        path,time = self.perform(start,[startID],[],0)
+        print (path, time)
 
-        if len(path) > 1:
-            index = station.neighbours.index(int(path[-2].id))
-            distance += int(station.time[index])
+    def perform(self,start,history,path,time):
+        neighbourIDs = self.stationList[int(start.id)]
+        paths_to_neighbour = self.Paths[int(start.id)]
+        travelTimes = self.distances[int(start.id)]
 
-        complete = True
-        for i in validStations:
-            if i not in path:
-                complete = False
+        if len(history) == self.length:
+            index = neighbourIDs.index(str(self.startID))
+            path+=paths_to_neighbour[index]
+            time += travelTimes[index]
+            return path,time
 
-        if complete and (int(path[0].id) in station.neighbours):
-            path.append(path[0])
-            self.routes.append([distance, path])
-            return
+        while True:
+            index = travelTimes.index(min(travelTimes))
+            if int(neighbourIDs[index]) in history:
+                paths_to_neighbour.pop(index)
+                neighbourIDs.pop(index)
+                travelTimes.pop(index)
+            else:
+                break
 
-        deadEnd = True
-        for i in validStations:
-            if (i.id not in self.overlap[int(station.id)]) and (
-                int(i.id) in station.neighbours) and (
-                    int(i.id) != int(self.remember[-1].id)):
-                self.remember.append(station)
-                self.overlap[int(station.id)].append(i.id)
-                self.find_paths(i, validStations, path, distance)
-                deadEnd = False
-
-        if deadEnd:
-            self.find_paths(self.remember.pop(), validStations, path, distance)
+        
+        path += paths_to_neighbour[index]
+        path.pop()
+        time += travelTimes[index]
+        history.append(int(neighbourIDs[index]))
+     
+        path,time = self.perform(self.graph.edges[int(neighbourIDs[index])-1],history,path,time)
+        return path,time
+ 
