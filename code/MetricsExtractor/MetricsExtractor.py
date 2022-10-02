@@ -1,8 +1,7 @@
-from abc import ABC, abstractmethod
-from graph import *
-from GraphFactory import *
 
-# strategy pattern to choose metric extractors
+from GraphBuilder import *
+from GraphFactory import *
+from abc import ABC, abstractmethod
 
 
 class MetricsExtractor(ABC):

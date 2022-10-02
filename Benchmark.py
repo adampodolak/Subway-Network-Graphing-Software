@@ -1,4 +1,4 @@
-from graph import *
+from GraphBuilder import *
 from GraphFactory import *
 from PathfinderFactory import *
 import random

@@ -37,8 +37,8 @@ class EdgeGraph:
 class BuildEdgeGraph:
 
     def build():
-        connections = '../_dataset/london.connections.csv'
-        stations = '../_dataset/london.stations.csv'
+        connections = '_dataset/london.connections.csv'
+        stations = '_dataset/london.stations.csv'
 
         g = GraphFactory()
         connections_graph = g.build_graph("connections")

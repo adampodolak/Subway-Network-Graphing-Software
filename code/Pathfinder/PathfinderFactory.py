@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TypedDict
-from graph import *
+from GraphBuilder import EdgeGraph
 import math
 
 
