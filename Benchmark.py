@@ -1,10 +1,10 @@
 import sys
+import random
 sys.path.insert(0, './code/GraphBuilder')
 from GraphBuilder import EdgeGraph
 sys.path.insert(0, './code/Pathfinder')
 from PathfinderFactory import PathfinderFactory
 from PathfinderInterface import PathfinderAlgorithm
-import random
 
 
 def build_dataset(num_of_samples):
@@ -16,7 +16,9 @@ def build_dataset(num_of_samples):
     return dataset
 
 
-def multi_pathfind(pathfinder: PathfinderAlgorithm, graph: EdgeGraph, dataset: dict, kpi: str):
+def multi_pathfind(
+        pathfinder: PathfinderAlgorithm,
+        graph: EdgeGraph, dataset: dict, kpi: str):
     result = {}
     for key in dataset:
         s1 = dataset[key][0]

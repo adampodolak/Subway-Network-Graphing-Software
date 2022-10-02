@@ -1,22 +1,8 @@
 
-from abc import ABC, abstractmethod
 import sys
 sys.path.insert(0, './../GraphBuilder')
 from GraphBuilder import EdgeGraph
-
-class MetricsExtractor(ABC):
-
-    @abstractmethod
-    def get_metric(self, graph):
-        pass
-
-
-class Selector():
-    def set_metrics_extractor(self, metrics_extractor: MetricsExtractor):
-        self.metrics_extractor = metrics_extractor
-
-    def execute(self, graph: EdgeGraph):
-        return self.metrics_extractor.get_metric(graph)
+from Interface import MetricsExtractor
 
 
 class GetNumberOfNodes(MetricsExtractor):
@@ -28,8 +14,15 @@ class GetNumberOfEdges(MetricsExtractor):
     def get_metric(self, graph: EdgeGraph):
         count = 0
         for i in graph.edges:
+<<<<<<< HEAD:code/MetricsExtractor/MetricsExtractor.py
             for j in i.neighbours:
                 count += 1
+=======
+            if i:
+                for j in i.neighbours:
+                    count += 1
+
+>>>>>>> 55d0a3898ce99cb34eaff67ec3f0f0df3707be5a:code/MetricsExtractor/MetricsExtractors.py
         return count // 2
 
 
