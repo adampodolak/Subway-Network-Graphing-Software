@@ -36,7 +36,6 @@ class PathfinderAlgorithm(ABC):
 
 
 class Dijkstras(PathfinderAlgorithm):
-    # implement dijkstras here, add the number of nodes visited, edges visited, travel time, and return the path
     def findpath(self, graph: EdgeGraph, s1, s2):
         mst = [[]]
         # q holds priority list
@@ -50,25 +49,30 @@ class Dijkstras(PathfinderAlgorithm):
             distTo.append(1000)
             mst.append([])
         distTo[s1-1] = 0
-        mst[s1-1].append(s1)
+        mst[s1-1].append(int(s1))
 
-        q = self.find_neighbours(graph, q, qfollow)
+        # if start or end node not an actual station
+        if s1 < 0 or s1 > len(graph.edges) or s2 < 0 or s2 > len(graph.edges):
+            self.set(0, 0, 1000)
+            return []
 
         while q:
-            index = int(q[0].id)-1
-            # distTo[new node] = time to new node from old node + distTo[old node]
-            if distTo[index] > (int(q[0].time) + distTo[int(qfollow[0].id)-1]):
-                distTo[index] = int(q[0].time) + distTo[int(qfollow[0].id)-1]
-                # path to new node = path to old node + new node
-                mst[index] = []
-                for i in mst[int(qfollow[0].id)-1]:
-                    mst[index].append(i)
-                mst[index].append(q[0].id)
-
-            # update priority queue
             q = self.find_neighbours(graph, q, qfollow)
             q.pop(0)
             qfollow.pop(0)
+            if not q:
+                break
+            index = int(q[0].id)-1
+            # distTo[new node] = time to new node from old node + distTo[old node]
+            findTime = q[0].neighbours.index(int(qfollow[0].id))
+            if distTo[index] > int(q[0].time[findTime]) + distTo[int(qfollow[0].id)-1]:
+                distTo[index] = int(q[0].time[findTime]) + \
+                    distTo[int(qfollow[0].id)-1]
+                # path to new node = path to old node + new node
+                mst[index] = []
+                for i in mst[int(qfollow[0].id)-1]:
+                    mst[index].append(int(i))
+                mst[index].append(int(q[0].id))
 
         nodes = len(mst[s2-1])
         edges = len(mst[s2-1]) - 1
@@ -76,108 +80,91 @@ class Dijkstras(PathfinderAlgorithm):
         self.set(nodes, edges, distTo[s2-1])
 
         if s2 <= len(graph.edges):
+            for i in graph.edges:
+                if i:
+                    i.marked = False
             return mst[s2-1]
 
     def find_neighbours(self, graph: EdgeGraph, q, qfollow):
-        for i in graph.edges[int(q[0].id)-1].neighbours:
-            if i.marked == False:
-                q.append(i)
-                i.marked = True
+        for i in q[0].neighbours:
+            if not graph.edges[i-1].marked:
+                q.append(graph.edges[i-1])
+                graph.edges[i-1].marked = True
                 qfollow.append(q[0])
         return q
 
 
-class Astar(PathfinderAlgorithm):
-
-    # implement A*
+class AstarDFS(PathfinderAlgorithm):
     def findpath(self, graph: EdgeGraph, s1, s2):
-        mst = [[]]
-        # q holds priority list
-        q = []
-        distTo = []
-        # qfollow and q indexes are connected. qfollow allows access to distTo[old node]
-        qfollow = []
+        path = [graph.edges[s1-1]]
+        end = False
 
-        endNode = graph.edges[s2-1]
+        # if start and end node are the same
+        if s1 == s2:
+            end = True
 
-        changeLat = float(
-            graph.edges[s2-1].lat) - float(graph.edges[s1-1].lat)
-        changeLong = float(
-            graph.edges[s2-1].long) - float(graph.edges[s1-1].long)
-        shortest_path = math.hypot(float(changeLat), float(changeLong))
+        # if start or end node not an actual station
+        if s1 < 0 or s1 > len(graph.edges) or s2 < 0 or s2 > len(graph.edges):
+            self.set(0, 0, 1000)
+            return []
 
-        # initialize distTo array
-        for i in range(len(graph.edges)):
-            distTo.append(1000)
-            mst.append([])
-        distTo[s1-1] = 0
-        mst[s1-1].append(s1)
-
-        # initialize q and qfollow
-        q.append(graph.edges[s1-1])
-        qfollow.append(q[0])
-        q, qfollow, shortest_path = self.valid(
-            q, qfollow, q[0], shortest_path, endNode)
-
-        # distTo[new node] = time to new node from old node + distTo[old node]
-        while q:
-            index = int(q[0].id)-1
-            if distTo[index] > (int(q[0].time) + distTo[int(qfollow[0].id)-1]):
-                distTo[index] = int(q[0].time) + distTo[int(qfollow[0].id)-1]
-                # path to new node = path to old node + new node
-                mst[index] = []
-                for i in mst[int(qfollow[0].id)-1]:
-                    mst[index].append(i)
-                mst[index].append(q[0].id)
-
-            if int(q[0].id) == s2:
-                print("leaving")
+        while not end:
+            path, end = self.find_next_node(
+                graph, graph.edges[s2-1], path, end)
+            if end:
                 break
-            q, qfollow, shortest_path = self.valid(
-                q, qfollow, graph.edges[int(q[0].id)-1], shortest_path, endNode)
-            qfollow.pop()
 
-        return distTo[s2-1]
+        dist = self.find_distance(path)
 
-    def valid(self, q, qfollow, node, shortest_path, endnode):
-        best = None
-        for i in node.neighbours:
-            dist = math.hypot(float(endnode.lat) - float(i.lat),
-                              float(endnode.long) - float(i.long))
+        nodes = len(path)
+        edges = nodes-1
+        self.set(nodes, edges, dist)
 
-            if dist <= shortest_path:
-                shortest_path = dist
-                best = i
-                q[0].time = i.time
-                if dist == 0:
-                    break
-        q.pop()
-        q.append(best)
-        q[0].marked = True
-        qfollow.append(q[0])
+        for i in graph.edges:
+            if i:
+                i.marked = False
+        answer = []
+        for i in path:
+            answer.append(int(i.id))
+        return answer
 
-        return q, qfollow, shortest_path
+    def find_next_node(self, graph, s2, path, end):
+        closestN = None
+        relativeShort = 1000
+        for i in path[len(path)-1].neighbours:
+            if not graph.edges[i-1].marked:
+                edge1 = float(s2.lat) - float(graph.edges[i-1].lat)
+                edge2 = float(s2.long) - float(graph.edges[i-1].long)
+                dist = math.hypot(edge1, edge2)
+
+                if dist <= relativeShort:
+                    relativeShort = dist
+                    closestN = graph.edges[i-1]
+                    if dist == 0:
+                        end = True
+                        break
+        if closestN:
+            closestN.marked = True
+            path.append(closestN)
+        else:
+            path.pop()
+        return path, end
+
+    def find_distance(self, path):
+        dist = 0
+        for i in range(len(path)-1):
+            t_index = path[i].neighbours.index(int(path[i+1].id))
+            dist += int(path[i].time[t_index])
+        return dist
 
 
 class PathfinderFactory():
 
     @staticmethod
-    def createPathfinder(name):
+    def create_pathfinder(name):
         if name == "dijkstras":
             return Dijkstras()
         elif name == "a*":
-            return Astar()
+            return AstarDFS()
         else:
             raise ValueError(name)
-
-
-graph = main()
-
-alg = PathfinderFactory()
-dijkstras = alg.createPathfinder("dijkstras")
-dijkstras.call(graph, 11, 45)
-result = dijkstras.result
-nodes = dijkstras.result["nodes"]
-edges = dijkstras.result["edges"]
-print(result)
-print(nodes, edges)

@@ -3,7 +3,7 @@ import csv
 # factory pattern to generate graphs
 
 
-class GraphFactory(ABC):
+class Graph(ABC):
 
     @abstractmethod
     def format_csv_file(self, csv_file):
@@ -14,7 +14,7 @@ class GraphFactory(ABC):
         pass
 
 
-class ConnectionsGraph(GraphFactory):
+class ConnectionsGraph(Graph):
 
     def __init__(self):
         self.type = "connections"
@@ -39,7 +39,7 @@ class ConnectionsGraph(GraphFactory):
         return max
 
 
-class StationsGraph(GraphFactory):
+class StationsGraph(Graph):
 
     def __init__(self):
         self.type = "stations"
