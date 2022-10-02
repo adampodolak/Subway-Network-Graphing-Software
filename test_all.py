@@ -3,6 +3,28 @@ sys.path.insert(0, './code/Pathfinder')
 from PathfinderFactory import PathfinderFactory
 sys.path.insert(0, './code/GraphBuilder')
 from GraphBuilder import BuildEdgeGraph
+sys.path.insert(0, './code/MetricsExtractor')
+from MetricsExtractors import (
+    GetNumberOfNodes, GetNumberOfEdges, GetAverageDegreeNodes)
+from Selector import Selector
+
+
+class testMetricsExtractors():
+    def __init__(self, graph) -> None:
+        self.graph = graph
+        self.selector = Selector()
+
+    def testGetNodes(self):
+        self.selector.set_metrics_extractor(GetNumberOfNodes())
+        assert self.selector.execute(graph) == 303
+
+    def testGetEdges(self):
+        self.selector.set_metrics_extractor(GetNumberOfEdges())
+        assert self.selector.execute(graph) == 406
+
+    def testAverageDegree(self):
+        self.selector.set_metrics_extractor(GetAverageDegreeNodes())
+        assert self.selector.execute(graph) == 2
 
 
 class testPaths():
@@ -112,3 +134,8 @@ testA.testPath4()
 testA.testPath5()
 testA.testPath6()
 testA.test_find_next_node()
+
+metrics_tester = testMetricsExtractors(graph)
+metrics_tester.testGetNodes()
+metrics_tester.testGetEdges()
+metrics_tester.testAverageDegree()
