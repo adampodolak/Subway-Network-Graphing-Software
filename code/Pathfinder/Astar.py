@@ -1,11 +1,14 @@
-import math
 from PathfinderInterface import PathfinderAlgorithm
-import sys
-sys.path.insert(0, './../GraphBuilder')
-from GraphBuilder import EdgeGraph
+import math
+
 
 class AstarDFS(PathfinderAlgorithm):
-    def findpath(self, graph: EdgeGraph, s1, s2):
+    def findpath(self, graph, s1, s2):
+        # if start or end node not an actual station
+        if s1 < 0 or s1 > len(graph.edges) or s2 < 0 or s2 > len(graph.edges):
+            self.set(0, 0, 1000)
+            return []
+
         if not graph.edges[s1-1] or not graph.edges[s2 - 1]:
             return []
 
@@ -15,11 +18,6 @@ class AstarDFS(PathfinderAlgorithm):
         # if start and end node are the same
         if s1 == s2:
             end = True
-
-        # if start or end node not an actual station
-        if s1 < 0 or s1 > len(graph.edges) or s2 < 0 or s2 > len(graph.edges):
-            self.set(0, 0, 1000)
-            return []
 
         while not end:
             path, end = self.find_next_node(

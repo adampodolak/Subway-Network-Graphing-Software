@@ -1,6 +1,7 @@
 from GraphInterface import Graph
 import csv
 
+
 class ConnectionsGraph(Graph):
 
     def __init__(self):
@@ -17,9 +18,9 @@ class ConnectionsGraph(Graph):
         return self.edges
 
     def find_max(self, csv):
-        l = self.format_csv_file(csv)
-        max = int(l[0][0])
-        for i in l:
+        lst = self.format_csv_file(csv)
+        max = int(lst[0][0])
+        for i in lst:
             if int(i[0]) > max:
                 max = int(i[0])
 

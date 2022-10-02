@@ -1,8 +1,6 @@
+
 from abc import ABC, abstractmethod
 from typing import TypedDict
-import sys
-sys.path.insert(0, './../GraphBuilder')
-from GraphBuilder import EdgeGraph
 
 
 class PathfinderResult(TypedDict):
@@ -17,7 +15,7 @@ class PathfinderAlgorithm(ABC):
     edges_visited = 0
     travel_time = 0
 
-    def call(self, graph: EdgeGraph, s1, s2) -> PathfinderResult:
+    def call(self, graph, s1, s2) -> PathfinderResult:
         self.result: PathfinderResult = {
             "path": self.findpath(graph, s1, s2),
             "nodes": self.nodes_visited,
@@ -32,5 +30,5 @@ class PathfinderAlgorithm(ABC):
         self.travel_time = travel_time
 
     @abstractmethod
-    def findpath(self, graph: EdgeGraph, s1, s2):
+    def findpath(self, graph, s1, s2):
         pass
