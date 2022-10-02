@@ -30,9 +30,9 @@ class ConnectionsGraph(GraphFactory):
         return self.edges
 
     def find_max(self, csv):
-        l = self.format_csv_file(csv)
-        max = int(l[0][0])
-        for i in l:
+        formatted = self.format_csv_file(csv)
+        max = int(formatted[0][0])
+        for i in formatted:
             if int(i[0]) > max:
                 max = int(i[0])
 
@@ -55,9 +55,9 @@ class StationsGraph(GraphFactory):
         return self.edges
 
     def find_max(self, csv):
-        l = self.format_csv_file(csv)
-        max = int(l[0][0])
-        for i in l:
+        formatted = self.format_csv_file(csv)
+        max = int(formatted[0][0])
+        for i in formatted:
             if int(i[0]) > max:
                 max = int(i[0])
 

@@ -31,7 +31,6 @@ class GetNumberOfEdges(MetricsExtractor):
         for i in graph.edges:
             for j in i.neighbours:
                 count += 1
-
         return count // 2
 
 

@@ -2,11 +2,11 @@ from GraphFactory import *
 
 
 class Station:
-    def __init__(self, id, line, time, lat, long) -> None:
+    def __init__(self, id, line, lat, long) -> None:
         self.id = id
         self.neighbours = []
         self.line = line
-        self.time = time
+        self.time = []
         self.marked = False
         self.lat = lat
         self.long = long
@@ -22,19 +22,19 @@ class EdgeGraph:
     def build_edgeGraph(self, Elist, s):
         # initialize stations in array
         for i in s:
-            self.edges[int(i[0])-1] = Station(i[0], None, 0, i[1], i[2])
+            self.edges[int(i[0])-1] = Station(i[0], None, i[1], i[2])
 
         for i in Elist:
-            s1 = Station(i[0], i[2], i[3], self.edges[int(
-                i[0])-1].lat, self.edges[int(i[0])-1].long)
-            s2 = Station(i[1], i[2], i[3], self.edges[int(
-                i[1])-1].lat, self.edges[int(i[1])-1].long)
-            self.edges[int(i[0])-1].neighbours.append(s2)
-            self.edges[int(i[1])-1].neighbours.append(s1)
+            self.edges[int(i[0])-1].neighbours.append(
+                    int(self.edges[int(i[1])-1].id))
+            self.edges[int(i[0])-1].time.append(i[3])
+            self.edges[int(i[1])-1].neighbours.append(
+                int(self.edges[int(i[0])-1].id))
+            self.edges[int(i[1])-1].time.append(i[3])
 
 
 def getWeight(graph, s1, s2):
-    return(graph.get(s1, s2))
+    return (graph.get(s1, s2))
 
 
 def main():
