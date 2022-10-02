@@ -284,6 +284,17 @@
             "markers": "python_version >= '3.5'",
             "version": "==3.4"
         },
+<<<<<<< HEAD
+=======
+        "importlib-metadata": {
+            "hashes": [
+                "sha256:da31db32b304314d044d3c12c79bd59e307889b287ad12ff387b3500835fc2ab",
+                "sha256:ddb0e35065e8938f867ed4928d0ae5bf2a53b7773871bfe6bcc7e4fcdc7dea43"
+            ],
+            "markers": "python_version < '3.10'",
+            "version": "==5.0.0"
+        },
+>>>>>>> ce62144d6605b596b42adbc3977e2dd860ce1a48
         "importlib-resources": {
             "hashes": [
                 "sha256:5481e97fb45af8dcf2f798952625591c58fe599d0735d86b10f54de086a61681",
