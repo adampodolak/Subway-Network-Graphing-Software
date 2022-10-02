@@ -1,7 +1,7 @@
 Group Information
 ------------------
 
-### Group Number : 58
+### Group Number : Graph 58
 
 ### Group Members
 + Adam Podolak | podola2@mcmaster.ca 
