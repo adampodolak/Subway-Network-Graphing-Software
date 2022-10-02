@@ -1,4 +1,4 @@
-from GraphFactory import *
+from GraphFactory import GraphFactory
 
 
 class Station:

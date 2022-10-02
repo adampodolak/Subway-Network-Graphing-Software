@@ -1,6 +1,9 @@
-from GraphBuilder import *
-from GraphFactory import *
-from PathfinderFactory import *
+import sys
+sys.path.insert(0, './code/GraphBuilder')
+from GraphBuilder import EdgeGraph
+sys.path.insert(0, './code/Pathfinder')
+from PathfinderFactory import PathfinderFactory
+from PathfinderInterface import PathfinderAlgorithm
 import random
 
 

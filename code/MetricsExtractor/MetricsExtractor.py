@@ -1,8 +1,8 @@
 
-from GraphBuilder import *
-from GraphFactory import *
 from abc import ABC, abstractmethod
-
+import sys
+sys.path.insert(0, './../GraphBuilder')
+from GraphBuilder import EdgeGraph
 
 class MetricsExtractor(ABC):
 
