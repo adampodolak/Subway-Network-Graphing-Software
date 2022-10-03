@@ -10,6 +10,11 @@ from MetricsExtractors import (
     GetNumberOfNodes, GetNumberOfEdges, GetAverageDegreeNodes)
 from Selector import Selector
 
+sys.path.insert(0, './code/SubwayPatrolPlanning')
+from TravelerSalesman import TravellingSalesman
+sys.path.insert(0, './code/UrbanismPlanning')
+from ConnectedComponents import ConnectedComponents
+
 
 # testing the metrics extractors
 class testMetricsExtractors():
@@ -116,6 +121,13 @@ class testPaths():
                 i.marked = False
         assert hold == [11, 163, 212, 83, 104, 28, 249, 94]
 
+    def test_shortestPath1(self, traveler):
+        assert (traveler.find(22, [22, 47, 40]))[0] == [22, 47, 40, 47, 22]
+        assert (traveler.find(22, [22, 47, 40]))[1] == 8
+
+    def test_connectedPath1(self, connector):
+        assert (connector.run(self.graph, 9)) == [['46']]
+
 
 graph = BuildEdgeGraph.build()
 alg = PathfinderFactory()
@@ -143,3 +155,11 @@ metrics_tester = testMetricsExtractors(graph)
 metrics_tester.testGetNodes()
 metrics_tester.testGetEdges()
 metrics_tester.testAverageDegree()
+
+travelerTest = testPaths(graph, d1)
+traveler = TravellingSalesman(graph, d1)
+travelerTest.test_shortestPath1(traveler)
+
+testconnect = testPaths(graph, d1)
+connector = ConnectedComponents()
+testconnect.test_connectedPath1(connector)

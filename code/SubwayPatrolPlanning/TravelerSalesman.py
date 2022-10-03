@@ -36,7 +36,7 @@ class TravellingSalesman():
         self.data(validStations)
 
         path, time = self.perform(start, [startID], [], 0)
-        print(path, time)
+        return [path, time]
 
     def perform(self, start, history, path, time):
         neighbourIDs = self.stationList[int(start.id)]

@@ -6,9 +6,10 @@ class Station:
     # initialize a station class
     # holds information relating to each stations
     # our graph will be formed of Station objects
-    def __init__(self, id, line, lat, long) -> None:
+    def __init__(self, id, line, lat, long, zone) -> None:
         self.neighbours = []
         self.id = id
+        self.zone = zone
         self.line = line
         self.time = []
         self.marked = False
@@ -26,7 +27,7 @@ class EdgeGraph:
     def build_edge_graph(self, Elist, s):
         # initialize stations in array
         for i in s:
-            self.edges[int(i[0])-1] = Station(i[0], None, i[1], i[2])
+            self.edges[int(i[0])-1] = Station(i[0], None, i[1], i[2], i[5])
 
         # add the neighbours to the neighbours array
         for i in Elist:
