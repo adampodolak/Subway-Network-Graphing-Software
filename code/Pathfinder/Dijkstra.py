@@ -1,6 +1,7 @@
 from PathfinderInterface import PathfinderAlgorithm
 
 
+# dijkstras algorithm implementation
 class Dijkstras(PathfinderAlgorithm):
     def findpath(self, graph, s1, s2):
         # if start or end node not an actual station
@@ -49,6 +50,7 @@ class Dijkstras(PathfinderAlgorithm):
         nodes = len(mst[s2-1])
         edges = len(mst[s2-1]) - 1
 
+        # setting the PathfinderResult KPIs
         self.set(nodes, edges, distTo[s2-1])
 
         if s2 <= len(graph.edges):

@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import TypedDict
 
 
+# pathfinder result to help with benchmarking
 class PathfinderResult(TypedDict):
     path: list[int]
     num_nodes_visited: int
@@ -10,6 +11,7 @@ class PathfinderResult(TypedDict):
     travel_time: int
 
 
+# abstract pathfinder algorithm, adapted to support benchmarking KPIs
 class PathfinderAlgorithm(ABC):
     nodes_visited = 0
     edges_visited = 0
@@ -24,11 +26,13 @@ class PathfinderAlgorithm(ABC):
         }
         return self.result
 
+    # method to set KPIs once calculated inside concrete pathfinder
     def set(self, num_nodes, num_edges, travel_time):
         self.nodes_visited = num_nodes
         self.edges_visited = num_edges
         self.travel_time = travel_time
 
+    # abstract class that implements a specific pathfinding algoirthm
     @abstractmethod
     def findpath(self, graph, s1, s2):
         pass

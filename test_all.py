@@ -1,4 +1,6 @@
 import sys
+# flake8 is returning E402 here but,
+# there is no other way to format the importing of modules this way
 sys.path.insert(0, './code/Pathfinder')
 from PathfinderFactory import PathfinderFactory
 sys.path.insert(0, './code/GraphBuilder')
@@ -9,6 +11,7 @@ from MetricsExtractors import (
 from Selector import Selector
 
 
+# testing the metrics extractors
 class testMetricsExtractors():
     def __init__(self, graph) -> None:
         self.graph = graph
@@ -27,6 +30,7 @@ class testMetricsExtractors():
         assert self.selector.execute(graph) == 2
 
 
+# testing the pathfinding algorithms
 class testPaths():
     def __init__(self, graph, alg) -> None:
         self.graph = graph

@@ -3,6 +3,9 @@ from GraphFactory import GraphFactory
 
 class Station:
 
+    # initialize a station class
+    # holds information relating to each stations
+    # our graph will be formed of Station objects
     def __init__(self, id, line, lat, long) -> None:
         self.neighbours = []
         self.id = id
@@ -25,6 +28,7 @@ class EdgeGraph:
         for i in s:
             self.edges[int(i[0])-1] = Station(i[0], None, i[1], i[2])
 
+        # add the neighbours to the neighbours array
         for i in Elist:
             self.edges[int(
                 i[0])-1].neighbours.append(int(self.edges[int(i[1])-1].id))
@@ -36,6 +40,7 @@ class EdgeGraph:
 
 class BuildEdgeGraph:
 
+    # method to build the final graph
     def build():
         connections = '_dataset/london.connections.csv'
         stations = '_dataset/london.stations.csv'

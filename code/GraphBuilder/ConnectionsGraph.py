@@ -4,9 +4,12 @@ import csv
 
 class ConnectionsGraph(Graph):
 
+    # initialize a connections of graph
     def __init__(self):
         self.type = "connections"
 
+    # format csv file into a 2D array consisting
+    # of all the rows as subarrays
     def format_csv_file(self, csv_file):
         self.edges = []
         with open(csv_file) as connections:
@@ -17,6 +20,7 @@ class ConnectionsGraph(Graph):
             self.edges.pop(0)
         return self.edges
 
+    # finding the max necessary for building the Edge Graph
     def find_max(self, csv):
         lst = self.format_csv_file(csv)
         max = int(lst[0][0])

@@ -4,6 +4,7 @@ from StationsGraph import StationsGraph
 
 class GraphFactory():
 
+    # static method that returns a concrete graph
     @staticmethod
     def build_graph(csv_file_type):
         try:

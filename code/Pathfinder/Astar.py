@@ -2,6 +2,7 @@ from PathfinderInterface import PathfinderAlgorithm
 import math
 
 
+# A* pathfinding implementation
 class AstarDFS(PathfinderAlgorithm):
     def findpath(self, graph, s1, s2):
         # if start or end node not an actual station
@@ -27,6 +28,7 @@ class AstarDFS(PathfinderAlgorithm):
 
         dist = self.find_distance(path)
 
+        # setting the PathfinderResult KPIs
         nodes = len(path)
         edges = nodes-1
         self.set(nodes, edges, dist)
